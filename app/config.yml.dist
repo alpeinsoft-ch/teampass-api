@@ -1,0 +1,16 @@
+parameters:
+    database_driver:        pdo_mysql
+    database_host:          127.0.0.1
+    database_dbname:        teampass_db
+    database_user:          root
+    database_password:      ~
+    database_prefix:        teampass
+    database_charset:       utf8
+
+    locale:                 en
+    teampass_salt:          ~
+    encoder:                Teampass\Api\Service\Encoder\DefaultEncoder
+    key_generator:          Teampass\Api\Service\Encoder\DefaultKeyGenerator
+
+    endpoint:               api
+    version:                v1

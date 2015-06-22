@@ -1,0 +1,53 @@
+    {
+    "name": "alpeinsoft-ch/teampass-api",
+    "description": "API for teampass",
+    "keywords": [ "api", "teampass" ],
+    "homepage": "https://github.com/alpeinsoft-ch/teampass-api",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ALPEIN Software SWISS Team",
+            "homepage": "http://www.alpeinsoft.ch/",
+            "email": "contact@alpeinsoft.ch"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "doctrine/dbal": "~2.5.1",
+        "incenteev/composer-parameter-handler": "~2.1",
+        "passwordlib/passwordlib": "@dev",
+        "phpseclib/phpseclib": "2.0.*@dev",
+        "roderik/pwgen-php": "@stable",
+        "silex/silex": "~1.3",
+        "symfony/finder": "~2.7.1",
+        "symfony/translation": "~2.7.1"
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer": "2.0.*@dev",
+        "mmoreram/php-formatter": "1.0.*@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Teampass\\Api\\": "src/"
+        }
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ],
+        "post-update-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        },
+        "incenteev-parameters": {
+            "file": "app/config.yml"
+        }
+    }
+}

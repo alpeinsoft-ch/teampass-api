@@ -1,0 +1,28 @@
+user:
+    unauthorized: Benutzer ist nicht berechtigt
+    not_found: Benutzer %username% wurde nicht gefunden
+    disabled: Benutzer %username% ist deaktiviert
+    wrong_password: Falsches Passwort
+
+key:
+    already_exists: Key mit dem gleichen Titel ist bereits vorhanden
+    not_found: Key nicht gefunden
+
+node:
+    already_exists: Ordner mit dem gleichen Titel ist bereits vorhanden
+    not_found: Ordner nicht gefunden
+    not_writable: Ordner ist nicht beschreibbar
+    not_deleted: Ordner kann nicht gelöscht werden
+    not_read: Ordner nicht für lese zugänglich
+
+complication:
+    0: Sehr schwach
+    25: Schwach
+    50: Medium
+    60: Stark
+    70: Sehr stark
+    80: Schwer
+    90: Sehr schwer
+    is_wrong: Passwort ist falsch
+
+invalid_body: Ungültiges Format

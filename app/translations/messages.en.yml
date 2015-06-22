@@ -1,0 +1,28 @@
+user:
+    unauthorized: User is not authorized
+    not_found: User %username%, not found
+    disabled: User %username%, is disabled
+    wrong_password: Wrong password
+
+key:
+    already_exists: Key with the same title already exists
+    not_found: Key not found
+
+node:
+    already_exists: Folder with the same title already exists
+    not_found: Folder not found
+    not_writable: Folder is not accessible for write
+    not_deleted: Folder is not accessible for delete
+    not_read: Folder is not accessible for read
+
+complication:
+    0: Very weak
+    25: Weak
+    50: Medium
+    60: Strong
+    70: Very strong
+    80: Heavy
+    90: Very heavy
+    is_wrong: Complication passwords is wrong
+
+invalid_body: Invalid body format

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+for port in {8000..8010}
+do
+    result=`lsof -i :$port`
+    if [ -z "$result" ]; then break; fi
+done
+
+php -S localhost:$port -t web web/api.php
