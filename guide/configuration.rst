@@ -22,8 +22,8 @@ Configuration API stored in a file config.yml
 
         locale:                 en
         teampass_salt:          ~
-        encoder:                Teampass\Api\Service\Encoder\PSEncoder
-        key_generator:          Teampass\Api\Service\Encoder\PSKeyGenerator
+        encoder:                ~
+        key_generator:          ~
 
         endpoint:               api
         version:                v1
@@ -50,13 +50,55 @@ locale
 teampass_salt
     salt used teampass, please check salt in teampass, salt is defined in file sk.php
 encoder
-    please use default options
+    if you use PassSecurium Lite, set Teampass\Api\Service\Encoder\DefaultEncoder
+    if you use PassSecurium Standalone, set Teampass\Api\Service\Encoder\PSEncoder
 key_generator
-    please use default options
+    if you use PassSecurium Lite, set Teampass\Api\Service\Encoder\DefaultKeyGenerator
+    if you use PassSecurium Standalone, set Teampass\Api\Service\Encoder\PSKeyGenerator
 endpoint
     endpoint for API, by default = api
 version
     api version, by default = v1
+
+Example config for PassSecurium Lite
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+    parameters:
+        database_driver:        pdo_mysql
+        database_host:          127.0.0.1
+        database_dbname:        teampass_db
+        database_user:          root
+        database_password:      root
+        database_prefix:        teampass
+        database_charset:       utf8
+        locale:                 en
+        teampass_salt:          RnR5ZHeERVyZx3bShrmp4NyzXw3s
+        encoder:                Teampass\Api\Service\Encoder\DefaultEncoder
+        key_generator:          Teampass\Api\Service\Encoder\DefaultKeyGenerator
+        endpoint:               api
+        version:                v1
+
+Example config for PassSecurium Standalone
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+    parameters:
+        database_driver:        pdo_mysql
+        database_host:          127.0.0.1
+        database_dbname:        teampass_db
+        database_user:          root
+        database_password:      root
+        database_prefix:        teampass
+        database_charset:       utf8
+        locale:                 en
+        teampass_salt:          RnR5ZHeERVyZx3bShrmp4NyzXw3s
+        encoder:                Teampass\Api\Service\Encoder\PSEncoder
+        key_generator:          Teampass\Api\Service\Encoder\PSKeyGenerator
+        endpoint:               api
+        version:                v1
 
 Configuring a Web Server
 ------------------------
