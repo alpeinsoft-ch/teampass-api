@@ -50,11 +50,11 @@ locale
 teampass_salt
     salt used teampass, please check salt in teampass, salt is defined in file sk.php
 encoder
-    if you use PassSecurium Lite, set Teampass\Api\Service\Encoder\DefaultEncoder
-    if you use PassSecurium Standalone, set Teampass\Api\Service\Encoder\PSEncoder
+    if you use **PassSecurium Lite**, set Teampass\Api\Service\Encoder\DefaultEncoder,
+    if you use **PassSecurium Standalone**, set Teampass\Api\Service\Encoder\PSEncoder
 key_generator
-    if you use PassSecurium Lite, set Teampass\Api\Service\Encoder\DefaultKeyGenerator
-    if you use PassSecurium Standalone, set Teampass\Api\Service\Encoder\PSKeyGenerator
+    if you use **PassSecurium Lite**, set Teampass\Api\Service\Encoder\DefaultKeyGenerator,
+    if you use **PassSecurium Standalone**, set Teampass\Api\Service\Encoder\PSKeyGenerator
 endpoint
     endpoint for API, by default = api
 version
