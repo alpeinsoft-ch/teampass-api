@@ -21,25 +21,51 @@ Response
 
     [
         {
-            "id": "87",
-            "title": "тест",
+            "id": "1",
+            "title": "first folder",
             "type": "FOLDER",
             "access": "W",
-            "complication": "90",
+            "complication": "0",
             "descendants": [
                 {
-                    "description": "",
-                    "email": null,
-                    "id": "48",
-                    "password": "ceenaipa",
-                    "title": "хей хо",
+                    "id": "3",
+                    "title": "subfolder",
+                    "type": "FOLDER",
+                    "access": "R",
+                    "complication": "0",
+                    "descendants": []
+                },
+                {
+                    "id": "2",
+                    "title": "first key",
                     "type": "PASSWORD",
-                    "url": null,
-                    "username": "тест"
+                    "email": "demo@pass.securium.ch",
+                    "url": "https://pass.securium.ch",
+                    "password": "ZGVtbw==",
+                    "username": "ZGVtby51c2Vy",
+                    "description": ""
                 }
             ]
         },
-        ...
+        {
+            "id": "2",
+            "title": "second folder",
+            "type": "FOLDER",
+            "access": "W",
+            "complication": "0",
+            "descendants": [
+                {
+                    "id": "1",
+                    "title": "second key",
+                    "type": "PASSWORD",
+                    "email": "demo@pass.securium.ch",
+                    "username": "ZGVtby5tYW5hZ2Vy",
+                    "password": "ZGVtbw==",
+                    "url": "https://pass.securium.ch",
+                    "description": "",
+                }
+            ]
+        }
     ]
 
 Getting a single folder
@@ -61,19 +87,21 @@ Response
 .. code-block:: json
 
     {
-        "id": "85",
-        "title": "newtestfder",
+        "id": "2",
+        "title": "second folder",
         "type": "FOLDER",
         "access": "W",
-        "complication": "80",
+        "complication": "0",
         "descendants": [
             {
-                "id": "88",
-                "title": "CreateTestFolder2",
-                "type": "FOLDER",
-                "access": "W",
-                "complication": "0",
-                "descendants": []
+                "id": "1",
+                "title": "second key",
+                "type": "PASSWORD",
+                "url": "https://pass.securium.ch",
+                "username": "ZGVtby5tYW5hZ2Vy",
+                "password": "ZGVtbw==",
+                "email": "demo@pass.securium.ch",
+                "description": ""
             }
         ]
     }
@@ -107,8 +135,8 @@ Response
 .. code-block:: json
 
     {
-        "id": "88",
-        "title": "CreateTestFolder",
+        "id": "2",
+        "title": "second folder",
         "type": "FOLDER",
         "access": "W",
         "complication": "0",
@@ -144,19 +172,21 @@ Response
 .. code-block:: json
 
     {
-        "id": "85",
-        "title": "newtestfder",
+        "id": "2",
+        "title": "second folder rename",
         "type": "FOLDER",
         "access": "W",
-        "complication": "80",
+        "complication": "0",
         "descendants": [
             {
-                "id": "88",
-                "title": "CreateTestFolder2",
-                "type": "FOLDER",
-                "access": "W",
-                "complication": "0",
-                "descendants": []
+                "id": "1",
+                "title": "second key",
+                "type": "PASSWORD",
+                "url": "https://pass.securium.ch",
+                "username": "ZGVtby5tYW5hZ2Vy",
+                "password": "ZGVtbw==",
+                "email": "demo@pass.securium.ch",
+                "description": ""
             }
         ]
     }

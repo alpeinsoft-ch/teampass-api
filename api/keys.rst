@@ -20,15 +20,15 @@ Response
 .. code-block:: json
 
     {
-        "id": "67",
-        "title": "huhu",
+        "id": "1",
+        "title": "second key",
         "type": "PASSWORD",
-        "folder": "73",
-        "username": "Ymxh",
-        "password": "JUozfTIzNDRv",
-        "email": "",
-        "url": "",
-        "description": "vhggggg"
+        "folder": "2",
+        "url": "https://pass.securium.ch",
+        "password": "ZGVtbw==",
+        "username": "ZGVtby5tYW5hZ2Vy",
+        "email": "demo@pass.securium.ch",
+        "description": ""
     }
 
 Create a key
@@ -69,15 +69,15 @@ Response
 .. code-block:: json
 
     {
-        "id": "65",
-        "title": "test key",
+        "id": "2",
+        "title": "first key",
         "type": "PASSWORD",
-        "folder": "73",
-        "username": "Ymxh",
-        "password": "JUozfTIzNDRv",
-        "email": "",
-        "url": "",
-        "description": "vhggggg"
+        "folder": "1",
+        "url": "https://pass.securium.ch",
+        "password": "ZGVtbw==",
+        "username": "ZGVtby51c2Vy",
+        "email": "demo@pass.securium.ch",
+        "description": ""
     }
 
 Updating a key
@@ -118,15 +118,15 @@ Response
 .. code-block:: json
 
     {
-        "id": "67",
-        "title": "huhu",
+        "id": "2",
+        "title": "rename first key",
         "type": "PASSWORD",
-        "folder": "73",
-        "username": "Ymxh",
-        "password": "JUozfTIzNDRv",
-        "email": "",
-        "url": "",
-        "description": "vhggggg"
+        "folder": "1",
+        "url": "https://pass.securium.ch",
+        "password": "ZGVtbw==",
+        "username": "ZGVtby51c2Vy",
+        "email": "demo@pass.securium.ch",
+        "description": ""
     }
 
 Deleting a key

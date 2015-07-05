@@ -32,12 +32,7 @@ Response
 .. code-block:: json
 
     {
-        "id": "88",
-        "title": "CreateTestFolder",
-        "type": "FOLDER",
-        "access": "W",
-        "complication": "0",
-        "descendants": []
+        "password": "aiteizah"
     }
 
 Folder complexity
