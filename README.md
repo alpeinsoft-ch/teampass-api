@@ -15,7 +15,7 @@ Installation
 Use [Composer] to install:
 
 ```
-$ composer create-project alpeinsoft-ch/teampass-api "1.0.*@dev"
+$ composer create-project alpeinsoft-ch/teampass-api
 ```
 
 Authors
