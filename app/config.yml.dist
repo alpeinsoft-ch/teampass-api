@@ -8,9 +8,12 @@ parameters:
     database_charset:       utf8
 
     locale:                 en
+    encoder:                lite
+    # The secret value is a random string of characters, numbers and symbols. use with standalone encoder
+    secret:                 ThisTokenIsNotSoSecretChangeIt
+
+    # Please past salt from teampass
     teampass_salt:          ~
-    encoder:                Teampass\Api\Service\Encoder\DefaultEncoder
-    key_generator:          Teampass\Api\Service\Encoder\DefaultKeyGenerator
 
     endpoint:               api
     version:                v1

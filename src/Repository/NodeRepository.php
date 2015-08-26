@@ -38,7 +38,7 @@ class NodeRepository extends AbstractRepository
         foreach ($this->repositoryContainer->get('key')->findAllByNode($node['id']) as $key) {
             $randKeys = $this->connection->executeQuery(sprintf('SELECT * FROM %s WHERE sql_table = ? AND id = ?', $this->getTableName('keys')), ['items', $key['id']])->fetch();
             $key['username'] = $this->repositoryContainer->get('encoder')->encrypt($key['username']);
-            $key['password'] = $this->repositoryContainer->get('encoder')->encrypt((string) substr($this->repositoryContainer->get('teampass.encoder')->decrypt($key['password']), strlen($randKeys['rand_key'])));
+            $key['password'] = $this->repositoryContainer->get('encoder')->encrypt((string) substr($this->repositoryContainer->get('platform.encoder')->decrypt($key['password']), strlen($randKeys['rand_key'])));
             array_push($node['descendants'], $key);
         }
 
@@ -60,7 +60,7 @@ class NodeRepository extends AbstractRepository
         }
 
         $this->connection->insert($this->getTableName('nested_tree'), $data);
-        $this->repositoryContainer->get('tree_builder')->rebuild();
+        $this->repositoryContainer->get('platform.tree')->rebuild();
 
         $node = $this->connection->executeQuery(
             sprintf('SELECT * FROM %s WHERE title = ?', $this->getTableName('nested_tree')),
@@ -88,14 +88,14 @@ class NodeRepository extends AbstractRepository
 
     public function delete($id)
     {
-        $nodes = $this->repositoryContainer->get('tree_builder')->getDescendants($id, true, false, true);
+        $nodes = $this->repositoryContainer->get('platform.tree')->getDescendants($id, true, false, true);
         foreach ($nodes as $node) {
             $this->connection->delete($this->getTableName('nested_tree'), ['id' => $node]);
             $this->connection->delete($this->getTableName('misc'), ['type' => 'complex', 'intitule' => $node]);
             $this->connection->delete($this->getTableName('roles_values'), ['folder_id' => $node]);
             $this->connection->delete($this->getTableName('items'), ['id_tree' => $node]);
         }
-        $this->repositoryContainer->get('tree_builder')->rebuild();
+        $this->repositoryContainer->get('platform.tree')->rebuild();
 
         return true;
     }
@@ -125,7 +125,7 @@ class NodeRepository extends AbstractRepository
                 foreach ($this->repositoryContainer->get('key')->findAllByNode($node['id']) as $key) {
                     $randKeys = $this->connection->executeQuery(sprintf('SELECT * FROM %s WHERE sql_table = ? AND id = ?', $this->getTableName('keys')), ['items', $key['id']])->fetch();
                     $key['username'] = $this->repositoryContainer->get('encoder')->encrypt($key['username']);
-                    $key['password'] = $this->repositoryContainer->get('encoder')->encrypt((string) substr($this->repositoryContainer->get('teampass.encoder')->decrypt($key['password']), strlen($randKeys['rand_key'])));
+                    $key['password'] = $this->repositoryContainer->get('encoder')->encrypt((string) substr($this->repositoryContainer->get('platform.encoder')->decrypt($key['password']), strlen($randKeys['rand_key'])));
                     array_push($node['descendants'], $key);
                 }
 

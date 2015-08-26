@@ -1,9 +1,11 @@
 <?php
 
-namespace Teampass\Api\Service\Encoder;
+namespace Teampass\Api\Service\Platform;
 
-class TeampassEncoder implements EncoderInterface
+class Encoder
 {
+    const ITCOUNT = 2072;
+
     /**
      * @var string
      */
@@ -29,7 +31,7 @@ class TeampassEncoder implements EncoderInterface
     {
         $salt = null === $key ? $this->defaultSalt : $key;
         $pbkdf2Salt = $this->generateBits(64);
-        $key = substr(hash_pbkdf2('sha256', $salt, $pbkdf2Salt, EncoderInterface::ITCOUNT, 48, true), 32, 16);
+        $key = substr(hash_pbkdf2('sha256', $salt, $pbkdf2Salt, self::ITCOUNT, 48, true), 32, 16);
         $iv = mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, 'ctr'), MCRYPT_RAND);
         if (strlen($ivBase64 = rtrim(base64_encode($iv), '=')) != 43) {
             return false;
@@ -54,7 +56,7 @@ class TeampassEncoder implements EncoderInterface
         $encrypted = base64_decode($encrypted);
         $pbkdf2Salt = substr($encrypted, -64);
         $encrypted = substr($encrypted, 0, -64);
-        $key = substr(hash_pbkdf2('sha256', $salt, $pbkdf2Salt, EncoderInterface::ITCOUNT, 48, true), 32, 16);
+        $key = substr(hash_pbkdf2('sha256', $salt, $pbkdf2Salt, self::ITCOUNT, 48, true), 32, 16);
         $iv = base64_decode(substr($encrypted, 0, 43).'==');
         $encrypted = substr($encrypted, 43);
         $mac = substr($encrypted, -64);

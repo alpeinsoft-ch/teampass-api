@@ -14,6 +14,7 @@ final class SystemController extends AbstractController
         $controllers->get('/password/generate', [$this, 'generatePassword']);
         $controllers->post('/password/generate', [$this, 'generatePassword']);
         $controllers->get('/password/complication', [$this, 'complicationPassword']);
+        $controllers->get('/secret', [$this, 'secret']);
     }
 
     public function generatePassword(Request $request)
@@ -43,6 +44,13 @@ final class SystemController extends AbstractController
             70 => $this->container['translator']->trans('complication.70', [], 'messages', $this->container['locale']),
             80 => $this->container['translator']->trans('complication.80', [], 'messages', $this->container['locale']),
             90 => $this->container['translator']->trans('complication.90', [], 'messages', $this->container['locale']),
+        ], 200);
+    }
+
+    public function secret()
+    {
+        return new JsonResponse([
+            'secret' => $this->container['config']['secret'],
         ], 200);
     }
 

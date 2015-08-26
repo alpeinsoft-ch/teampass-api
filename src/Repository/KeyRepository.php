@@ -44,7 +44,7 @@ class KeyRepository extends AbstractRepository
             ['items', $id]
         )->fetch();
         $key['username'] = $this->repositoryContainer->get('encoder')->encrypt($key['username']);
-        $key['password'] = $this->repositoryContainer->get('encoder')->encrypt((string) substr($this->repositoryContainer->get('teampass.encoder')->decrypt($key['password']), strlen($randKeys['rand_key'])));
+        $key['password'] = $this->repositoryContainer->get('encoder')->encrypt((string) substr($this->repositoryContainer->get('platform.encoder')->decrypt($key['password']), strlen($randKeys['rand_key'])));
 
         return $key;
     }
@@ -60,7 +60,7 @@ class KeyRepository extends AbstractRepository
     public function create(array $data, array $user)
     {
         $randomKey = substr(md5(rand().rand()), 0, 15);
-        $data['pw'] = $this->repositoryContainer->get('teampass.encoder')->encrypt($randomKey.$data['pw']);
+        $data['pw'] = $this->repositoryContainer->get('platform.encoder')->encrypt($randomKey.$data['pw']);
         $this->connection->insert($this->getTableName('items'), $data);
         $key = $this->connection->executeQuery(
             sprintf('SELECT id, label AS title, \'PASSWORD\' AS type, login AS username, pw AS password, email, url, description, id_tree AS folder FROM %s WHERE label = ?', $this->getTableName('items')),
@@ -70,7 +70,7 @@ class KeyRepository extends AbstractRepository
         $date = new \DateTime('now');
         $this->connection->insert($this->getTableName('log_items'), ['id_item' => (int) $key['id'], 'date' => $date->getTimestamp(), 'id_user' => $user['id'], 'action' => 'at_creation']);
         $this->connection->insert($this->getTableName('keys'), ['sql_table' => 'items', 'id' => (int) $key['id'], 'rand_key' => $randomKey]);
-        $key['password'] = (string) substr($this->repositoryContainer->get('teampass.encoder')->decrypt($key['password']), strlen($randomKey));
+        $key['password'] = (string) substr($this->repositoryContainer->get('platform.encoder')->decrypt($key['password']), strlen($randomKey));
 
         return $key;
     }
@@ -82,7 +82,7 @@ class KeyRepository extends AbstractRepository
                 sprintf('SELECT * FROM %s WHERE sql_table = ? AND id = ?', $this->getTableName('keys')),
                 ['items', $id]
             )->fetch();
-            $data['pw'] = $this->repositoryContainer->get('teampass.encoder')->encrypt($randKeys['rand_key'].$data['pw']);
+            $data['pw'] = $this->repositoryContainer->get('platform.encoder')->encrypt($randKeys['rand_key'].$data['pw']);
         }
 
         $this->connection->update($this->getTableName('items'), $data, ['id' => $id]);

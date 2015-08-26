@@ -1,7 +1,5 @@
 #!/bin/bash
 
 readonly FIXER="bin/php-cs-fixer"
-readonly FORMATTER="bin/php-formatter"
 
-$FORMATTER formatter:use:sort src/ --verbose
 $FIXER fix --verbose

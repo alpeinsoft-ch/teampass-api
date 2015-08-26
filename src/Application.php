@@ -13,9 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
+use Teampass\Api\Provider\ApiServiceProvider;
 use Teampass\Api\Provider\ConfigServiceProvider;
-use Teampass\Api\Provider\EncoderServiceProvider;
-use Teampass\Api\Provider\TeampassTreeServiceProvider;
+use Teampass\Api\Provider\PlatformServiceProvider;
 use Teampass\Api\Repository\KeyRepository;
 use Teampass\Api\Repository\NodeRepository;
 use Teampass\Api\Repository\RepositoryContainer;
@@ -62,8 +62,8 @@ final class Application extends SilexApplication
         $this->register(new ConfigServiceProvider());
         $this->register(new UrlGeneratorServiceProvider());
         $this->register(new DoctrineServiceProvider(), $this['config']['database']);
-        $this->register(new EncoderServiceProvider());
-        $this->register(new TeampassTreeServiceProvider());
+        $this->register(new ApiServiceProvider());
+        $this->register(new PlatformServiceProvider());
         $this->register(new TranslationServiceProvider(), [
             'locale_fallbacks' => [$this['config']['locale']],
         ]);
@@ -94,8 +94,8 @@ final class Application extends SilexApplication
                 'user' => 'repository.user',
                 'node' => 'repository.node',
                 'key' => 'repository.key',
-                'tree_builder' => 'teampass.tree',
-                'teampass.encoder' => 'teampass.encoder',
+                'platform.tree' => 'platform.tree',
+                'platform.encoder' => 'platform.encoder',
                 'encoder' => 'api.encoder',
             ));
         });
@@ -132,12 +132,6 @@ final class Application extends SilexApplication
             }
 
             $this['user'] = $user;
-        });
-
-        $this->before(function () {
-            $generatorClass = $this['config']['key_generator'];
-            $generator = new $generatorClass();
-            $this['api.encoder']->setKey($generator->generate());
         });
 
         $this->error(function (\Exception $e, $code) {

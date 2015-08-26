@@ -1,10 +1,10 @@
 <?php
 
-namespace Teampass\Api\Service\Tree;
+namespace Teampass\Api\Service\Platform;
 
 use Doctrine\DBAL\Connection;
 
-class TeampassTree
+class Tree
 {
     /**
      * @var Connection
