@@ -21,9 +21,10 @@ Configuration API stored in a file config.yml
         database_charset:       utf8
 
         locale:                 en
-        teampass_salt:          ~
         encoder:                ~
-        key_generator:          ~
+        secret:                 ~
+
+        teampass_salt:          ~
 
         endpoint:               api
         version:                v1
@@ -47,14 +48,13 @@ database_charset
     charset for database, by default = utf8
 locale
     locale api, by default = en
+encoder
+    if you use **PassSecurium Lite**, set lite, default
+    if you use **PassSecurium Standalone**, set standalone
+secret
+    The secret value is a random string of characters, numbers and symbols. use with standalone encoder
 teampass_salt
     salt used teampass, please check salt in teampass, salt is defined in file sk.php
-encoder
-    if you use **PassSecurium Lite**, set Teampass\Api\Service\Encoder\DefaultEncoder,
-    if you use **PassSecurium Standalone**, set Teampass\Api\Service\Encoder\PSEncoder
-key_generator
-    if you use **PassSecurium Lite**, set Teampass\Api\Service\Encoder\DefaultKeyGenerator,
-    if you use **PassSecurium Standalone**, set Teampass\Api\Service\Encoder\PSKeyGenerator
 endpoint
     endpoint for API, by default = api
 version
@@ -74,9 +74,8 @@ Example config for PassSecurium Lite
         database_prefix:        teampass
         database_charset:       utf8
         locale:                 en
+        encoder:                lite
         teampass_salt:          RnR5ZHeERVyZx3bShrmp4NyzXw3s
-        encoder:                Teampass\Api\Service\Encoder\DefaultEncoder
-        key_generator:          Teampass\Api\Service\Encoder\DefaultKeyGenerator
         endpoint:               api
         version:                v1
 
@@ -94,9 +93,9 @@ Example config for PassSecurium Standalone
         database_prefix:        teampass
         database_charset:       utf8
         locale:                 en
+        encoder:                standalone
+        secret:                 ThisTokenIsNotSoSecretChangeIt
         teampass_salt:          RnR5ZHeERVyZx3bShrmp4NyzXw3s
-        encoder:                Teampass\Api\Service\Encoder\PSEncoder
-        key_generator:          Teampass\Api\Service\Encoder\PSKeyGenerator
         endpoint:               api
         version:                v1
 
