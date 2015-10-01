@@ -90,14 +90,14 @@ final class Application extends SilexApplication
             return new KeyRepository($app['db'], $app['repository_container']);
         });
         $this['repository_container'] = $this->share(function () use ($app) {
-            return new RepositoryContainer($app, array(
+            return new RepositoryContainer($app, [
                 'user' => 'repository.user',
                 'node' => 'repository.node',
                 'key' => 'repository.key',
                 'platform.tree' => 'platform.tree',
                 'platform.encoder' => 'platform.encoder',
                 'encoder' => 'api.encoder',
-            ));
+            ]);
         });
     }
 
@@ -108,7 +108,7 @@ final class Application extends SilexApplication
 
             if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
                 $data = json_decode($request->getContent(), true);
-                $request->request->replace(is_array($data) ? $data : array());
+                $request->request->replace(is_array($data) ? $data : []);
             }
         });
 

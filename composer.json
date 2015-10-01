@@ -23,7 +23,7 @@
         "symfony/translation": "~2.7"
     },
     "require-dev": {
-        "fabpot/php-cs-fixer": "2.0.x-dev"
+        "fabpot/php-cs-fixer": "^1.10"
     },
     "autoload": {
         "psr-4": {

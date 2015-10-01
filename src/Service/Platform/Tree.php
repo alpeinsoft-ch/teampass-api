@@ -37,7 +37,7 @@ class Tree
 
         foreach ($result->fetchAll(\PDO::FETCH_OBJ) as $row) {
             $arr[$row->$idField] = $row;
-            $arr[$row->$idField]->children = array();
+            $arr[$row->$idField]->children = [];
         }
 
         foreach ($arr as $id => $row) {

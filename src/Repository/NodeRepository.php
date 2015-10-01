@@ -72,7 +72,7 @@ class NodeRepository extends AbstractRepository
             $this->connection->insert($this->getTableName('roles_values'), ['role_id' => $role, 'folder_id' => $node['id'], 'type' => 'W']);
         }
 
-        return $node;
+        return $this->findById($node['id'], $user);
     }
 
     public function update($id, array $data, array $user)
