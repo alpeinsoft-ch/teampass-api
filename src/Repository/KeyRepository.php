@@ -30,7 +30,7 @@ class KeyRepository extends AbstractRepository
         )->fetchAll(\PDO::FETCH_COLUMN);
 
         $key = $this->connection->executeQuery(
-            sprintf('SELECT id, label AS title, \'PASSWORD\' AS type, login AS username, pw AS password, email, url, description, id_tree AS folder FROM %s WHERE id = ? AND id_tree IN (?) AND inactif = ?', $this->getTableName('items')),
+            sprintf('SELECT id, label AS title, \'PASSWORD\' AS type, login AS username, pw AS password, pw_iv AS iv, email, url, description, id_tree AS folder FROM %s WHERE id = ? AND id_tree IN (?) AND inactif = ?', $this->getTableName('items')),
             [$id, $nodes, 0],
             [\PDO::PARAM_INT, Connection::PARAM_INT_ARRAY, \PDO::PARAM_INT]
         )->fetch();
@@ -44,7 +44,7 @@ class KeyRepository extends AbstractRepository
             ['items', $id]
         )->fetch();
         $key['username'] = $this->repositoryContainer->get('encoder')->encrypt($key['username']);
-        $key['password'] = $this->repositoryContainer->get('encoder')->encrypt((string) substr($this->repositoryContainer->get('platform.encoder')->decrypt($key['password']), strlen($randKeys['rand_key'])));
+       	$key['password'] = $this->repositoryContainer->get('encoder')->encrypt($this->repositoryContainer->get('platform.encoder')->decrypt($key['password'], $key['iv']));
 
         return $key;
     }
@@ -52,7 +52,7 @@ class KeyRepository extends AbstractRepository
     public function findAllByNode($node = 0)
     {
         return $this->connection->fetchAll(
-            sprintf('SELECT id, label AS title, \'PASSWORD\' AS type, login AS username, pw AS password, email, url, description FROM %s WHERE id_tree = ? AND inactif = ?', $this->getTableName('items')),
+            sprintf('SELECT id, label AS title, \'PASSWORD\' AS type, login AS username, pw AS password, pw_iv AS iv, email, url, description FROM %s WHERE id_tree = ? AND inactif = ?', $this->getTableName('items')),
             [$node, 0]
         );
     }
@@ -60,17 +60,19 @@ class KeyRepository extends AbstractRepository
     public function create(array $data, array $user)
     {
         $randomKey = substr(md5(rand().rand()), 0, 15);
-        $data['pw'] = $this->repositoryContainer->get('platform.encoder')->encrypt($randomKey.$data['pw']);
+	$encryptedValues = $this->repositoryContainer->get('platform.encoder')->encrypt($data['pw']);
+	$data['pw'] = array_values($encryptedValues)[0];
+	$data['pw_iv'] = array_values($encryptedValues)[1];
         $this->connection->insert($this->getTableName('items'), $data);
         $key = $this->connection->executeQuery(
-            sprintf('SELECT id, label AS title, \'PASSWORD\' AS type, login AS username, pw AS password, email, url, description, id_tree AS folder FROM %s WHERE label = ?', $this->getTableName('items')),
+            sprintf('SELECT id, label AS title, \'PASSWORD\' AS type, login AS username, pw AS password, pw_iv AS iv, email, url, description, id_tree AS folder FROM %s WHERE label = ?', $this->getTableName('items')),
             [$data['label']],
             [\PDO::PARAM_STR]
         )->fetch();
         $date = new \DateTime('now');
         $this->connection->insert($this->getTableName('log_items'), ['id_item' => (int) $key['id'], 'date' => $date->getTimestamp(), 'id_user' => $user['id'], 'action' => 'at_creation']);
         $this->connection->insert($this->getTableName('keys'), ['sql_table' => 'items', 'id' => (int) $key['id'], 'rand_key' => $randomKey]);
-        $key['password'] = (string) substr($this->repositoryContainer->get('platform.encoder')->decrypt($key['password']), strlen($randomKey));
+        $key['password'] = (string) $this->repositoryContainer->get('platform.encoder')->decrypt($key['password'], $key['iv']);
 
         return $key;
     }
@@ -82,7 +84,9 @@ class KeyRepository extends AbstractRepository
                 sprintf('SELECT * FROM %s WHERE sql_table = ? AND id = ?', $this->getTableName('keys')),
                 ['items', $id]
             )->fetch();
-            $data['pw'] = $this->repositoryContainer->get('platform.encoder')->encrypt($randKeys['rand_key'].$data['pw']);
+	    $encryptedValues = $this->repositoryContainer->get('platform.encoder')->encrypt($data['pw']);
+            $data['pw'] = array_values($encryptedValues)[0];
+            $data['pw_iv'] = array_values($encryptedValues)[1];
         }
 
         $this->connection->update($this->getTableName('items'), $data, ['id' => $id]);

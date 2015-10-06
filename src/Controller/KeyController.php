@@ -111,12 +111,12 @@ final class KeyController extends AbstractController
         }
 
         if (array_key_exists('username', $data)) {
-            $data['login'] = $this->container['api.encoder']->decrypt($data['username']);
-            unset($data['username']);
+            $data['login'] = $data['username'];
+	    unset($data['username']);
         }
 
         if (array_key_exists('password', $data)) {
-            $data['pw'] = $this->container['api.encoder']->decrypt($data['password']);
+            $data['pw'] = $this->container['api.encoder']->decrypt($data['password'], $data['iv']);
             unset($data['password']);
         }
 
