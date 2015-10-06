@@ -1,6 +1,8 @@
 <?php
 
 namespace Teampass\Api\Service\Platform;
+include_once("__DIR__.'/../../vendor/phpcrypt/phpCrypt.php");
+use PHP_Crypt\PHP_Crypt as PHP_Crypt;
 
 class Encoder
 {
@@ -25,58 +27,73 @@ class Encoder
      * @param string $decrypted
      * @param string $key
      *
-     * @return bool|string
+     * @return bool|array
      */
     public function encrypt($decrypted, $key = null)
     {
         $salt = null === $key ? $this->defaultSalt : $key;
-        $pbkdf2Salt = $this->generateBits(64);
-        $key = substr(hash_pbkdf2('sha256', $salt, $pbkdf2Salt, self::ITCOUNT, 48, true), 32, 16);
-        $iv = mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, 'ctr'), MCRYPT_RAND);
-        if (strlen($ivBase64 = rtrim(base64_encode($iv), '=')) != 43) {
-            return false;
-        }
-        $encrypted = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, $decrypted, 'ctr', $iv);
-        $mac = hash_hmac('sha256', $encrypted, $salt);
+        //manage key origin
+        if (empty($key)) $key = $salt;
 
-        return base64_encode($ivBase64.$encrypted.$mac.$pbkdf2Salt);
+        if ($key != $salt) {
+            // check key (AES-128 requires a 16 bytes length key)
+            if (strlen($key) < 16) {
+                for ($x = strlen($key) + 1; $x <= 16; $x++) {
+                    $key .= chr(0);
+                }
+            } else if (strlen($key) > 16) {
+                $key = substr($key, 16);
+            }
+        }
+ 
+        // load crypt
+        $crypt = new PHP_Crypt($key, CIPHER_AES_128, MODE_CBC);
+	$string = trim($decrypted);
+	if(empty($string)) return false;
+        //generate IV and encrypt
+        $iv = $crypt->createIV();
+        $encrypted = $crypt->encrypt($string);
+        // return
+        return array(
+            "string" => bin2hex($encrypted),
+            "iv" => bin2hex($iv)
+       	);
     }
 
     /**
      * Decrypt data for teampass db.
      *
      * @param string $encrypted
+     * @param string $iv
      * @param string $key
      *
      * @return bool|string
      */
-    public function decrypt($encrypted, $key = null)
+    public function decrypt($encrypted, $iv, $key = null)
     {
         $salt = null === $key ? $this->defaultSalt : $key;
-        $encrypted = base64_decode($encrypted);
-        $pbkdf2Salt = substr($encrypted, -64);
-        $encrypted = substr($encrypted, 0, -64);
-        $key = substr(hash_pbkdf2('sha256', $salt, $pbkdf2Salt, self::ITCOUNT, 48, true), 32, 16);
-        $iv = base64_decode(substr($encrypted, 0, 43).'==');
-        $encrypted = substr($encrypted, 43);
-        $mac = substr($encrypted, -64);
-        $encrypted = substr($encrypted, 0, -64);
-
-        if (hash_hmac('sha256', $encrypted, $salt) != $mac) {
-            return false;
+        // manage key origin
+        if (empty($key)) $key = $salt;
+        if ($key != $salt) {
+            // check key (AES-128 requires a 16 bytes length key)
+            if (strlen($key) < 16) {
+                for ($x = strlen($key) + 1; $x <= 16; $x++) {
+                    $key .= chr(0);
+                }
+            } else if (strlen($key) > 16) {
+                $key = substr($key, 16);
+            }
         }
-
-        return rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $encrypted, 'ctr', $iv), "\0\4");
-    }
-
-    private function generateBits($n)
-    {
-        $str = '';
-        $x = $n + 10;
-        for ($i = 0; $i < $x; ++$i) {
-            $str .= base_convert(mt_rand(1, 36), 10, 36);
-        }
-
-        return substr($str, 0, $n);
+        // load crypt
+        $crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CBC);
+        if (empty($iv)) return false;
+        $string = hex2bin($encrypted);
+        $iv = hex2bin($iv);
+        // load IV
+        $crypt->IV($iv);
+        // decrypt
+        $decrypt = $crypt->decrypt($string);
+        // return
+        return str_replace(chr(0), "", $decrypt);
     }
 }
