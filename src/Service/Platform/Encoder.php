@@ -1,7 +1,7 @@
 <?php
 
 namespace Teampass\Api\Service\Platform;
-include_once("__DIR__.'/../../vendor/phpcrypt/phpCrypt.php");
+include("__DIR__.'/../../vendor/phpcrypt/phpCrypt.php");
 use PHP_Crypt\PHP_Crypt as PHP_Crypt;
 
 class Encoder
@@ -47,7 +47,7 @@ class Encoder
         }
  
         // load crypt
-        $crypt = new PHP_Crypt($key, CIPHER_AES_128, MODE_CBC);
+        $crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CBC);
 	$string = trim($decrypted);
 	if(empty($string)) return false;
         //generate IV and encrypt

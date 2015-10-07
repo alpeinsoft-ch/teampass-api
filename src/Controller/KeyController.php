@@ -116,7 +116,7 @@ final class KeyController extends AbstractController
         }
 
         if (array_key_exists('password', $data)) {
-            $data['pw'] = $this->container['api.encoder']->decrypt($data['password'], $data['iv']);
+            $data['pw'] = $this->container['api.encoder']->decrypt($data['password']);
             unset($data['password']);
         }
 
