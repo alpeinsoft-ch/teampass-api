@@ -1,6 +1,6 @@
 /app/config.yml
 /bin/*
-/vendor/
-
+/vendor/*
+!/vendor/phpcrypt
 !/bin/cs-fixer
 !/bin/start
