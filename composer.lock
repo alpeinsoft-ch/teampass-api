@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "632fa7c94426bf8874abf242514db294",
-    "content-hash": "9d5d990d4fae8f595d48b414438f62de",
+    "hash": "583282d49117769d054a61274dadeadd",
+    "content-hash": "84edc4f688b84925af8318b176b613c7",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -475,6 +475,21 @@
                 "parser"
             ],
             "time": "2014-09-09 13:34:57"
+        },
+        {
+            "name": "gilfether/phpcrypt",
+            "version": "0.5.1",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:gilfether/phpcrypt.git",
+                "reference": "v0.5.1"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "phpCrypt.php"
+                ]
+            }
         },
         {
             "name": "incenteev/composer-parameter-handler",

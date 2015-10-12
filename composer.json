@@ -11,9 +11,27 @@
             "email": "contact@alpeinsoft.ch"
         }
     ],
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "gilfether/phpcrypt",
+                "version": "0.5.1",
+                "source": {
+                    "url": "git@github.com:gilfether/phpcrypt.git",
+                    "type": "git",
+                    "reference":"v0.5.1"
+                },
+                "autoload": {
+                    "classmap": ["phpCrypt.php"]
+                }
+            }
+        }
+    ],
     "require": {
         "php": ">=5.5.9",
         "doctrine/dbal": "~2.5",
+        "gilfether/phpcrypt": "^0.5",
         "incenteev/composer-parameter-handler": "~2.1",
         "passwordlib/passwordlib": "@dev",
         "phpseclib/phpseclib": "~2.0",
