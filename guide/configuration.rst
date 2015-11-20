@@ -141,3 +141,35 @@ The **minimum configuration** to get your application running under Apache is:
             Require all granted
             # ...
         </Directory>
+
+NGINX
+~~~~~
+
+The **minimum configuration** to get your application running under Nginx is:
+
+.. code-block:: nginx
+
+    server {
+        server_name domain.tld www.domain.tld;
+        root /var/www/project/web;
+
+        location / {
+            # try to serve file directly, fallback to front controller
+            try_files $uri /index.php$is_args$args;
+        }
+
+        location ~ ^/(index|api)\.php(/|$) {
+            # the ubuntu default
+            fastcgi_pass   unix:/var/run/php5-fpm.sock;
+            # for running on centos
+            #fastcgi_pass   unix:/var/run/php-fpm/www.sock;
+
+            fastcgi_split_path_info ^(.+\.php)(/.*)$;
+            include fastcgi_params;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            fastcgi_param HTTPS off;
+        }
+
+        error_log /var/log/nginx/project_error.log;
+        access_log /var/log/nginx/project_access.log;
+    }

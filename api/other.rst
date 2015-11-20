@@ -6,7 +6,7 @@ Generate a password
 
 .. code-block:: text
 
-    [GET] /api/v1/password/generate
+    [GET|POST] /api/v1/password/generate
 
 Parameters
 ~~~~~~~~~~
