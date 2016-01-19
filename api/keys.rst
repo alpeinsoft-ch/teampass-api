@@ -38,7 +38,7 @@ To create a new key, you can execute the following request:
 
 .. code-block:: text
 
-    [POST] /api/key
+    [POST] /api/v1/key
 
 Parameters
 ~~~~~~~~~~
