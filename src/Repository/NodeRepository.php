@@ -37,9 +37,8 @@ class NodeRepository extends AbstractRepository
         ];
 
         foreach ($this->repositoryContainer->get('key')->findAllByNode($node['id']) as $key) {
-            $randKeys = $this->connection->executeQuery(sprintf('SELECT * FROM %s WHERE sql_table = ? AND id = ?', $this->getTableName('keys')), ['items', $key['id']])->fetch();
             $key['username'] = $this->repositoryContainer->get('encoder')->encrypt($key['username']);
-            $key['password'] = $this->repositoryContainer->get('encoder')->encrypt((string) substr($this->repositoryContainer->get('platform.encoder')->decrypt($key['password']), strlen($randKeys['rand_key'])));
+            $key['password'] = $this->repositoryContainer->get('encoder')->encrypt($this->repositoryContainer->get('platform.encoder')->decrypt($key['password'], $key['iv']));
             array_push($node['descendants'], $key);
         }
 
@@ -146,9 +145,8 @@ class NodeRepository extends AbstractRepository
 
                 if ([] !== $access) {
                     foreach ($this->repositoryContainer->get('key')->findAllByNode($node['id']) as $key) {
-                        $randKeys = $this->connection->executeQuery(sprintf('SELECT * FROM %s WHERE sql_table = ? AND id = ?', $this->getTableName('keys')), ['items', $key['id']])->fetch();
                         $key['username'] = $this->repositoryContainer->get('encoder')->encrypt($key['username']);
-                        $key['password'] = $this->repositoryContainer->get('encoder')->encrypt((string) substr($this->repositoryContainer->get('platform.encoder')->decrypt($key['password']), strlen($randKeys['rand_key'])));
+                        $key['password'] = $this->repositoryContainer->get('encoder')->encrypt($this->repositoryContainer->get('platform.encoder')->decrypt($key['password'], $key['iv']));
                         array_push($node['descendants'], $key);
                     }
                 }
