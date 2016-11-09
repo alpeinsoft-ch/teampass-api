@@ -12,14 +12,6 @@ use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 final class KeyController extends AbstractController
 {
-    protected function addRoutes(ControllerCollection $controllers)
-    {
-        $controllers->post('/key', [$this, 'create']);
-        $controllers->get('/key/{id}', [$this, 'show']);
-        $controllers->put('/key/{id}', [$this, 'update']);
-        $controllers->delete('/key/{id}', [$this, 'delete']);
-    }
-
     public function show($id)
     {
         $key = $this->container['repository.key']->findById($id, $this->container['user']);
@@ -125,5 +117,13 @@ final class KeyController extends AbstractController
         }
 
         return $data;
+    }
+
+    protected function addRoutes(ControllerCollection $controllers)
+    {
+        $controllers->post('/key', [$this, 'create']);
+        $controllers->get('/key/{id}', [$this, 'show']);
+        $controllers->put('/key/{id}', [$this, 'update']);
+        $controllers->delete('/key/{id}', [$this, 'delete']);
     }
 }

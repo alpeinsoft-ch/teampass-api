@@ -9,14 +9,6 @@ use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 final class SystemController extends AbstractController
 {
-    protected function addRoutes(ControllerCollection $controllers)
-    {
-        $controllers->get('/password/generate', [$this, 'generatePassword']);
-        $controllers->post('/password/generate', [$this, 'generatePassword']);
-        $controllers->get('/password/complication', [$this, 'complicationPassword']);
-        $controllers->get('/secret', [$this, 'secret']);
-    }
-
     public function generatePassword(Request $request)
     {
         $data = 'POST' === $request->getMethod() ? $this->handleRequest($request) : $request->query->all();
@@ -52,6 +44,14 @@ final class SystemController extends AbstractController
         return new JsonResponse([
             'secret' => $this->container['config']['secret'],
         ], 200);
+    }
+
+    protected function addRoutes(ControllerCollection $controllers)
+    {
+        $controllers->get('/password/generate', [$this, 'generatePassword']);
+        $controllers->post('/password/generate', [$this, 'generatePassword']);
+        $controllers->get('/password/complication', [$this, 'complicationPassword']);
+        $controllers->get('/secret', [$this, 'secret']);
     }
 
     private function handleRequest(Request $request)

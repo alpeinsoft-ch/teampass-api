@@ -1,16 +1,22 @@
 <?php
 
-$finder = Symfony\CS\Finder\DefaultFinder::create()
-    ->in(['src/'])
-;
-
-return Symfony\CS\Config\Config::create()
-    ->finder($finder)
-    ->level(\Symfony\CS\FixerInterface::PSR2_LEVEL)
-    ->fixers([
-        'ordered_use',
-        'short_array_syntax',
-        'unused_use',
+return PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
+    ->setRules([
+        '@Symfony' => true,
+        'no_unreachable_default_argument_value' => false,
+        'no_useless_else' => true,
+        'ordered_class_elements' => true,
+        'ordered_imports' => true,
+        'psr4' => true,
+        'short_array_syntax' => true,
     ])
-    ->setUsingCache(true)
+    ->setFinder(
+        PhpCsFixer\Finder::create()
+            ->notName('*.dist')
+            ->notName('*.yml')
+            ->notName('*.rb')
+            ->notName('*.twig')
+            ->in(['src/'])
+    )
 ;

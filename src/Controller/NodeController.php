@@ -12,15 +12,6 @@ use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 final class NodeController extends AbstractController
 {
-    protected function addRoutes(ControllerCollection $controllers)
-    {
-        $controllers->get('/nodes', [$this, 'all']);
-        $controllers->get('/node/{id}', [$this, 'show']);
-        $controllers->post('/node', [$this, 'create']);
-        $controllers->put('/node/{id}', [$this, 'update']);
-        $controllers->delete('/node/{id}', [$this, 'delete']);
-    }
-
     public function all()
     {
         return new JsonResponse($this->container['repository.node']->findAllByUser($this->container['user']), 200);
@@ -31,6 +22,10 @@ final class NodeController extends AbstractController
         $node = $this->container['repository.node']->findById($id, $this->container['user']);
         if (false === $node) {
             throw new NotFoundHttpException($this->container['translator']->trans('node.not_found', [], 'messages', $this->container['locale']));
+        }
+
+        if (!in_array('W', explode(', ', $node['access'])) && !in_array('R', explode(', ', $node['access']))) {
+            throw new AccessDeniedHttpException($this->container['translator']->trans('node.not_read', [], 'messages', $this->container['locale']));
         }
 
         return new JsonResponse($node, 200);
@@ -122,5 +117,14 @@ final class NodeController extends AbstractController
         }
 
         return $data;
+    }
+
+    protected function addRoutes(ControllerCollection $controllers)
+    {
+        $controllers->get('/nodes', [$this, 'all']);
+        $controllers->get('/node/{id}', [$this, 'show']);
+        $controllers->post('/node', [$this, 'create']);
+        $controllers->put('/node/{id}', [$this, 'update']);
+        $controllers->delete('/node/{id}', [$this, 'delete']);
     }
 }

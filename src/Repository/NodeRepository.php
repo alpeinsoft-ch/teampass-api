@@ -37,6 +37,7 @@ class NodeRepository extends AbstractRepository
         ];
 
         foreach ($this->repositoryContainer->get('key')->findAllByNode($node['id']) as $key) {
+            $randKeys = $this->connection->executeQuery(sprintf('SELECT * FROM %s WHERE sql_table = ? AND id = ?', $this->getTableName('keys')), ['items', $key['id']])->fetch();
             $key['username'] = $this->repositoryContainer->get('encoder')->encrypt($key['username']);
             $key['password'] = $this->repositoryContainer->get('encoder')->encrypt((string) substr($this->repositoryContainer->get('platform.encoder')->decrypt($key['password']), strlen($randKeys['rand_key'])));
             array_push($node['descendants'], $key);
@@ -100,6 +101,23 @@ class NodeRepository extends AbstractRepository
         return true;
     }
 
+    public function isGranted($id, $user)
+    {
+        if (!is_array($id)) {
+            $id = [$id];
+        }
+        $access = array_map(function ($value) {
+            return $value['type'];
+        }, $this->connection->fetchAll(sprintf('SELECT DISTINCT type FROM %s WHERE role_id IN (?) AND folder_id in (?)', $this->getTableName('roles_values')), [explode(';', $user['fonction_id']), $id], [Connection::PARAM_INT_ARRAY, Connection::PARAM_INT_ARRAY])
+        );
+
+        if ([] === $access) {
+            return false;
+        }
+
+        return true;
+    }
+
     private function buildTree(array $user, $parent = 0, $tree = [])
     {
         $nodes = $this->connection->fetchAll(
@@ -113,6 +131,10 @@ class NodeRepository extends AbstractRepository
                     return $value['type'];
                 }, $this->connection->fetchAll(sprintf('SELECT DISTINCT type FROM %s WHERE role_id IN (?) AND folder_id = ?', $this->getTableName('roles_values')), [explode(';', $user['fonction_id']), $item['id']], [Connection::PARAM_INT_ARRAY]));
 
+                if (!$this->isGranted($this->repositoryContainer->get('platform.tree')->findChildrenId($item['id'], $user), $user) && [] === $access) {
+                    continue;
+                }
+
                 $node = [
                     'id' => $item['id'],
                     'title' => $item['title'],
@@ -122,10 +144,13 @@ class NodeRepository extends AbstractRepository
                     'descendants' => $this->buildTree($user, $item['id']),
                 ];
 
-                foreach ($this->repositoryContainer->get('key')->findAllByNode($node['id']) as $key) {
-                    $key['username'] = $this->repositoryContainer->get('encoder')->encrypt($key['username']);
-                    $key['password'] = $this->repositoryContainer->get('encoder')->encrypt($this->repositoryContainer->get('platform.encoder')->decrypt($key['password'], $key['iv']));
-                    array_push($node['descendants'], $key);
+                if ([] !== $access) {
+                    foreach ($this->repositoryContainer->get('key')->findAllByNode($node['id']) as $key) {
+                        $randKeys = $this->connection->executeQuery(sprintf('SELECT * FROM %s WHERE sql_table = ? AND id = ?', $this->getTableName('keys')), ['items', $key['id']])->fetch();
+                        $key['username'] = $this->repositoryContainer->get('encoder')->encrypt($key['username']);
+                        $key['password'] = $this->repositoryContainer->get('encoder')->encrypt((string) substr($this->repositoryContainer->get('platform.encoder')->decrypt($key['password']), strlen($randKeys['rand_key'])));
+                        array_push($node['descendants'], $key);
+                    }
                 }
 
                 $tree[] = $node;

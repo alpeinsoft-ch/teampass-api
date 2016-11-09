@@ -1,5 +1,0 @@
-#!/bin/bash
-
-readonly FIXER="bin/php-cs-fixer"
-
-$FIXER fix --verbose

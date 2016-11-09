@@ -5,3 +5,5 @@
 
 !/bin/cs-fixer
 !/bin/start
+
+composer.lock
